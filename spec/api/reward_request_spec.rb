@@ -4,13 +4,17 @@ describe RewardService do
 
   # Helper to parse response JSON into a hash
   def response_hash
-    JSON.parse(last_response.body)
+    JSON.parse(last_response.body.to_s)
+  end
+
+  def json_post_helper(url, data)
+    post url, data.to_json, {'Content-Type' => 'application/json'}
   end
 
   context "if the customer is eligible" do
 
-    def test_reward(client_id, portfoio, rewards)
-      post '/', params={client_id: client_id, portfoio: portfoio }
+    def test_reward(client_id, portfolio, rewards)
+      json_post_helper('/', {client_id: client_id, portfolio: portfolio})
       expect(response_hash).to eq({'status' => 'OK', 'rewards' => rewards})
     end
 
@@ -36,7 +40,7 @@ describe RewardService do
     end
 
     it "returns no rewards" do
-      post '/', params={client_id: 999, portfoio: ['SPORTS','KIDS','MUSIC'] }
+      json_post_helper('/', {clinet_id: 999, portfolio: ['SPORTS','KIDS','MUSIC']})
       expect(response_hash).to eq({'status' => 'OK', 'rewards' => []})
     end
   end
@@ -47,7 +51,7 @@ describe RewardService do
     end
 
     it "returns no rewards" do
-      post '/', params={client_id: 999, portfoio: ['SPORTS','KIDS','MUSIC'] }
+      json_post_helper('/', {clinet_id: 999, portfolio: ['SPORTS','KIDS','MUSIC']})
       expect(response_hash).to eq({'status' => 'OK', 'rewards' => []})
     end
   end
@@ -58,12 +62,12 @@ describe RewardService do
     end
 
     it "returns no rewards" do
-      post '/', params={client_id: 999, portfoio: ['SPORTS','KIDS','MUSIC'] }
+      json_post_helper('/', {clinet_id: 999, portfolio: ['SPORTS','KIDS','MUSIC']})
       expect(response_hash['rewards']).to eq([])
     end
 
     it "notifies client the account number is invalid" do
-      post '/', params={client_id: 999, portfoio: ['SPORTS','KIDS','MUSIC'] }
+      json_post_helper('/', {clinet_id: 999, portfolio: ['SPORTS','KIDS','MUSIC']})
       expect(response_hash['status']).to eq('Account number invalid')
     end
   end

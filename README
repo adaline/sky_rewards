@@ -1,0 +1,13 @@
+Sorry did not have time to add model and SO specs,
+I hope you can infer that I can complete these based on provided code.
+
+To set up the project (assuming you have ruby and bundler gem):
+
+  - git clone [repo url]
+  - cd [repo path]
+  - bundle
+  - bundle exec rspec
+  - bundle exec rackup
+
+Thanks,
+Valentin
