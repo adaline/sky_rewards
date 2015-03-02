@@ -20,6 +20,10 @@ describe RewardCheck do
       expect(so.call(999, ['NEWS'])).to eq([])
       expect(so.call(999, ['MOVIES'])).to eq(['PIRATES_OF_THE_CARIBBEAN_COLLECTION'])
     end
+
+    it "returns correct rewards as a group" do
+      expect(so.call(999, ['SPORTS','KIDS','MUSIC'])).to eq(['CHAMPIONS_LEAGUE_FINAL_TICKET','KARAOKE_PRO_MICROPHONE'])
+    end
   end
 
   context "if customer is ineligble" do
@@ -33,6 +37,10 @@ describe RewardCheck do
       expect(so.call(999, ['MUSIC'])).to eq([])
       expect(so.call(999, ['NEWS'])).to eq([])
       expect(so.call(999, ['MOVIES'])).to eq([])
+    end
+
+    it "returns no rewards as a group" do
+      expect(so.call(999, ['SPORTS','KIDS','MUSIC'])).to eq([])
     end
   end
 
@@ -48,6 +56,10 @@ describe RewardCheck do
       expect(so.call(999, ['NEWS'])).to eq([])
       expect(so.call(999, ['MOVIES'])).to eq([])
     end
+
+    it "returns no rewards as a group" do
+      expect(so.call(999, ['SPORTS','KIDS','MUSIC'])).to eq([])
+    end
   end
 
   context "if a customer id is invalid" do
@@ -57,6 +69,14 @@ describe RewardCheck do
 
     it "throws an error" do
       expect {so.call(999, ['SPORTS'])}.to raise_error("INVALID_CLIENT_ID")
+      expect {so.call(999, ['KIDS'])}.to raise_error("INVALID_CLIENT_ID")
+      expect {so.call(999, ['MUSIC'])}.to raise_error("INVALID_CLIENT_ID")
+      expect {so.call(999, ['NEWS'])}.to raise_error("INVALID_CLIENT_ID")
+      expect {so.call(999, ['MOVIES'])}.to raise_error("INVALID_CLIENT_ID")
+    end
+
+    it "throws an error given a group"  do
+      expect {so.call(999, ['SPORTS','KIDS','MUSIC'])}.to raise_error("INVALID_CLIENT_ID")
     end
   end
 end
